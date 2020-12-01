@@ -9,8 +9,8 @@ import Text.Read (readMaybe)
 
 getDay1Input :: IO [Integer]
 getDay1Input =
-  let converToInteger = readMaybe . Text.unpack
-   in mapMaybe converToInteger . Text.lines
+  let convertToInteger = readMaybe . Text.unpack
+   in mapMaybe convertToInteger . Text.lines
         <$> TextIO.readFile "data/day1"
 
 calculateAnswer :: [Integer] -> Int -> Maybe Integer

@@ -14,27 +14,3 @@ Repository of my solutions to [Advent of Code 2020](https://adventofcode.com/202
 | Day    | Solution               |
 | ------ | ---------------------- |
 | Day 1  | [Day1.hs](app/Day1.hs) |
-| Day 2  | pending                |
-| Day 3  | pending                |
-| Day 4  | pending                |
-| Day 5  | pending                |
-| Day 6  | pending                |
-| Day 7  | pending                |
-| Day 8  | pending                |
-| Day 9  | pending                |
-| Day 10 | pending                |
-| Day 11 | pending                |
-| Day 12 | pending                |
-| Day 13 | pending                |
-| Day 14 | pending                |
-| Day 15 | pending                |
-| Day 16 | pending                |
-| Day 17 | pending                |
-| Day 18 | pending                |
-| Day 19 | pending                |
-| Day 20 | pending                |
-| Day 21 | pending                |
-| Day 22 | pending                |
-| Day 23 | pending                |
-| Day 24 | pending                |
-| Day 25 | pending                |

@@ -1,0 +1,79 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "advent-of-code2020:lib:shared-lib"
+
+    - path: "./app/Day1.hs"
+      component: "advent-of-code2020:exe:day1"
+
+    - path: "./app/Day2.hs"
+      component: "advent-of-code2020:exe:day2"
+
+    - path: "./app/Day3.hs"
+      component: "advent-of-code2020:exe:day3"
+
+    - path: "./app/Day4.hs"
+      component: "advent-of-code2020:exe:day4"
+
+    - path: "./app/Day5.hs"
+      component: "advent-of-code2020:exe:day5"
+
+    - path: "./app/Day6.hs"
+      component: "advent-of-code2020:exe:day6"
+
+    - path: "./app/Day7.hs"
+      component: "advent-of-code2020:exe:day7"
+
+    - path: "./app/Day8.hs"
+      component: "advent-of-code2020:exe:day8"
+
+    - path: "./app/Day9.hs"
+      component: "advent-of-code2020:exe:day9"
+
+    - path: "./app/Day10.hs"
+      component: "advent-of-code2020:exe:day10"
+
+    - path: "./app/Day11.hs"
+      component: "advent-of-code2020:exe:day11"
+
+    - path: "./app/Day12.hs"
+      component: "advent-of-code2020:exe:day12"
+
+    - path: "./app/Day13.hs"
+      component: "advent-of-code2020:exe:day13"
+
+    - path: "./app/Day14.hs"
+      component: "advent-of-code2020:exe:day14"
+
+    - path: "./app/Day15.hs"
+      component: "advent-of-code2020:exe:day15"
+
+    - path: "./app/Day16.hs"
+      component: "advent-of-code2020:exe:day16"
+
+    - path: "./app/Day17.hs"
+      component: "advent-of-code2020:exe:day17"
+
+    - path: "./app/Day18.hs"
+      component: "advent-of-code2020:exe:day18"
+
+    - path: "./app/Day19.hs"
+      component: "advent-of-code2020:exe:day19"
+
+    - path: "./app/Day20.hs"
+      component: "advent-of-code2020:exe:day20"
+
+    - path: "./app/Day21.hs"
+      component: "advent-of-code2020:exe:day21"
+
+    - path: "./app/Day22.hs"
+      component: "advent-of-code2020:exe:day22"
+
+    - path: "./app/Day23.hs"
+      component: "advent-of-code2020:exe:day23"
+
+    - path: "./app/Day24.hs"
+      component: "advent-of-code2020:exe:day24"
+
+    - path: "./app/Day25.hs"
+      component: "advent-of-code2020:exe:day25"

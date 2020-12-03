@@ -48,6 +48,7 @@ common shared
     , base        ^>=4.13.0
     , bytestring  ^>=0.10.10
     , text        ^>=1.2.4
+    , pointedlist ^>=0.6.1
 
 common shared-exe
   ghc-options:    -threaded -rtsopts -with-rtsopts=-N

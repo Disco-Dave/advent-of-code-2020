@@ -1,17 +1,13 @@
 module Main where
 
+import AdventOfCode.Parser (parseLinesOfFile)
 import Control.Monad (replicateM)
+import qualified Data.Attoparsec.Text as Parser
 import Data.Foldable (find)
-import Data.Maybe (mapMaybe)
-import qualified Data.Text as Text
-import qualified Data.Text.IO as TextIO
-import Text.Read (readMaybe)
 
 getDay1Input :: IO [Integer]
 getDay1Input =
-  let convertToInteger = readMaybe . Text.unpack
-   in mapMaybe convertToInteger . Text.lines
-        <$> TextIO.readFile "data/day1"
+  parseLinesOfFile "data/day1" Parser.decimal
 
 calculateAnswer :: [Integer] -> Int -> Maybe Integer
 calculateAnswer input size =

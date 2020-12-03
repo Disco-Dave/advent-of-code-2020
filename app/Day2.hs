@@ -1,12 +1,11 @@
 module Main where
 
-import AdventOfCode.Parser (parseLines)
+import AdventOfCode.Numeric (integralToBounded)
+import AdventOfCode.Parser (parseLinesOfFile)
 import AdventOfCode.Text (safeIndex)
-import Control.Exception (throwIO)
 import qualified Data.Attoparsec.Text as Parser
 import Data.Text (Text)
 import qualified Data.Text as Text
-import qualified Data.Text.IO as TextIO
 import Numeric.Natural (Natural)
 
 data PasswordPolicy = PasswordPolicy
@@ -18,16 +17,17 @@ data PasswordPolicy = PasswordPolicy
 
 getDay2Input :: IO [(PasswordPolicy, Text)]
 getDay2Input =
-  let lineParser = do
-        passwordPolicy <-
-          PasswordPolicy
-            <$> Parser.decimal
-            <*> (Parser.skip (== '-') *> Parser.decimal)
-            <*> (Parser.skipSpace *> Parser.anyChar)
+  let passwordPolicyParser = do
+        firstNumber <- Parser.decimal
+        Parser.skip (== '-')
+        secondNumber <- Parser.decimal
+        Parser.skipSpace
+        requiredChar <- Parser.anyChar
+        pure PasswordPolicy {..}
+   in parseLinesOfFile "data/day2" $ do
+        policy <- passwordPolicyParser
         Parser.skip (== ':') *> Parser.skipSpace
-        (passwordPolicy,) <$> Parser.takeTill Parser.isEndOfLine
-   in TextIO.readFile "data/day2"
-        >>= (either throwIO pure . parseLines lineParser)
+        (policy,) <$> Parser.takeTill Parser.isEndOfLine
 
 countValidPasswords :: [(PasswordPolicy, Text)] -> (PasswordPolicy -> Text -> Bool) -> Int
 countValidPasswords inputs doesComplyWithPolicy =
@@ -42,8 +42,8 @@ part1Policy PasswordPolicy {..} testPassword =
 
 part2Policy :: PasswordPolicy -> Text -> Bool
 part2Policy PasswordPolicy {..} testPassword =
-  let firstChar = safeIndex testPassword (fromIntegral firstNumber - 1)
-      secondChar = safeIndex testPassword (fromIntegral secondNumber - 1)
+  let firstChar = safeIndex testPassword =<< integralToBounded (firstNumber - 1)
+      secondChar = safeIndex testPassword =<< integralToBounded (secondNumber - 1)
    in case (firstChar == Just requiredChar, secondChar == Just requiredChar) of
         (False, True) -> True
         (True, False) -> True

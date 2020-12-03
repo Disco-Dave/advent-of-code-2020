@@ -1,14 +1,16 @@
 module AdventOfCode.Parser
   ( ParseError (..),
     parseLines,
+    parseLinesOfFile,
   )
 where
 
-import Control.Exception (Exception)
+import Control.Exception (Exception, throwIO)
 import Data.Attoparsec.Text (Parser)
 import qualified Data.Attoparsec.Text as Parser
 import Data.Bifunctor (first)
 import Data.Text (Text)
+import qualified Data.Text.IO as TextIO
 import Data.Typeable (Typeable)
 
 data ParseError = ParseError
@@ -26,3 +28,8 @@ parseLines parser input =
           <* Parser.option () Parser.endOfLine
           <* Parser.endOfInput
    in first (const ParseError) $ Parser.parseOnly parser' input
+
+parseLinesOfFile :: FilePath -> Parser a -> IO [a]
+parseLinesOfFile filePath lineParser = do
+  fileContents <- TextIO.readFile filePath
+  either throwIO pure $ parseLines lineParser fileContents

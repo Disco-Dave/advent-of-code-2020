@@ -58,6 +58,7 @@ library shared-lib
   import:          shared
   hs-source-dirs:  src
   exposed-modules:
+    AdventOfCode.Numeric
     AdventOfCode.Parser
     AdventOfCode.Text
 

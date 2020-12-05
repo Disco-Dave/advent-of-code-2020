@@ -17,3 +17,4 @@ Repository of my solutions to [Advent of Code 2020](https://adventofcode.com/202
 | Day 2  | [Day2.hs](app/Day2.hs) |
 | Day 3  | [Day3.hs](app/Day3.hs) |
 | Day 4  | [Day4.hs](app/Day4.hs) |
+| Day 5  | [Day5.hs](app/Day5.hs) |

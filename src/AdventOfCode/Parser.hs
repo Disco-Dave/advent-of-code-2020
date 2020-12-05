@@ -16,11 +16,11 @@ import Data.Text (Text)
 import qualified Data.Text.IO as TextIO
 import Data.Typeable (Typeable)
 
-data ParseError = ParseError
+newtype ParseError = ParseError String
   deriving (Typeable)
 
 instance Show ParseError where
-  show _ = "Failed to parse Day 2 input"
+  show (ParseError e) = e
 
 instance Exception ParseError
 
@@ -30,7 +30,7 @@ parseLines parser input =
         Parser.sepBy parser Parser.endOfLine
           <* Parser.option () Parser.endOfLine
           <* Parser.endOfInput
-   in first (const ParseError) $ Parser.parseOnly parser' input
+   in first ParseError $ Parser.parseOnly parser' input
 
 
 parseLinesOfFile :: FilePath -> Parser a -> IO [a]

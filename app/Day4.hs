@@ -1,8 +1,7 @@
 module Main where
 
-import AdventOfCode.Parser (ParseError (ParseError))
+import AdventOfCode.Parser (parseGroupsInFile)
 import Control.Applicative (Alternative ((<|>)))
-import Control.Exception (throwIO)
 import Control.Monad (replicateM_)
 import Data.Attoparsec.Text (Parser)
 import qualified Data.Attoparsec.Text as Parser
@@ -12,7 +11,6 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
 import Data.Text (Text)
-import qualified Data.Text.IO as TextIO
 
 data PassportField
   = BirthYear
@@ -51,13 +49,7 @@ passportParser =
   Map.fromList <$> Parser.sepBy passportFieldParser (Parser.skip Char.isSpace)
 
 getDay4Input :: IO [Passport]
-getDay4Input = do
-  let parser =
-        Parser.sepBy passportParser (replicateM_ 2 Parser.endOfLine)
-          <* Parser.option () Parser.endOfLine
-          <* Parser.endOfInput
-  contents <- TextIO.readFile "data/day4"
-  either (throwIO . ParseError) pure $ Parser.parseOnly parser contents
+getDay4Input = parseGroupsInFile "data/day4" passportParser
 
 type FieldValidator = PassportField -> PassportValue -> Bool
 

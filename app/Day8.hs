@@ -5,10 +5,11 @@ import Data.Attoparsec.Text (Parser)
 import qualified Data.Attoparsec.Text as Parser
 import Data.Foldable (find, toList)
 import Data.Functor (($>))
+import Data.IntSet (IntSet)
+import qualified Data.IntSet as IntSet
 import Data.List.PointedList (PointedList)
 import qualified Data.List.PointedList as PointedList
 import Data.Maybe (mapMaybe)
-import Numeric.Natural (Natural)
 
 data OpCode
   = Accumulate
@@ -20,8 +21,7 @@ type Argument = Int
 
 data Instruction = Instruction
   { instructionOpCode :: !OpCode,
-    instructionArgument :: !Argument,
-    instructionExecCount :: !Natural
+    instructionArgument :: !Argument
   }
   deriving (Show, Eq)
 
@@ -37,7 +37,6 @@ instructionParser = do
       ]
   Parser.skipSpace
   instructionArgument <- Parser.signed Parser.decimal
-  let instructionExecCount = 0
   pure Instruction {..}
 
 getDay8Input :: IO Program
@@ -51,36 +50,49 @@ data ProgramResult
   = LoopDetected {output :: Int}
   | Ended {output :: Int}
 
+data Runtime = Runtime
+  { runtimeAccumulator :: !Int,
+    runtimeSeenInstructions :: !IntSet
+  }
+  deriving (Show, Eq)
+
+newRuntime :: Runtime
+newRuntime = Runtime 0 IntSet.empty
+
+runInstruction :: Program -> Runtime -> (Maybe Program, Runtime)
+runInstruction program Runtime {..} =
+  let Instruction {..} = PointedList._focus program
+      (updatedAccumulator, increment) =
+        case instructionOpCode of
+          NoOp ->
+            (runtimeAccumulator, 1)
+          Jump ->
+            (runtimeAccumulator, instructionArgument)
+          Accumulate ->
+            (runtimeAccumulator + instructionArgument, 1)
+      updatedProgram = PointedList.moveN increment program
+      updatedRuntime =
+        Runtime
+          { runtimeAccumulator = updatedAccumulator,
+            runtimeSeenInstructions =
+              IntSet.insert (PointedList.index program) runtimeSeenInstructions
+          }
+   in (updatedProgram, updatedRuntime)
+
 runProgram :: Program -> ProgramResult
-runProgram = execute 0 . Just
+runProgram = go newRuntime . Just
   where
-    executeInstruction accumulator program =
-      let Instruction {..} = PointedList._focus program
-       in case instructionOpCode of
-            NoOp ->
-              (accumulator, PointedList.next program)
-            Accumulate ->
-              (accumulator + instructionArgument, PointedList.next program)
-            Jump ->
-              (accumulator, PointedList.moveN instructionArgument program)
-    execute accumulator Nothing = Ended accumulator
-    execute accumulator (Just program)
-      | execCount > 0 = LoopDetected accumulator
+    go Runtime {..} Nothing = Ended runtimeAccumulator
+    go runtime@Runtime {..} (Just program)
+      | IntSet.member (PointedList.index program) runtimeSeenInstructions =
+        LoopDetected runtimeAccumulator
       | otherwise =
-        let (newAccumulator, newProgram) = executeInstruction accumulator incrementedProgram
-         in execute newAccumulator newProgram
-      where
-        execCount = instructionExecCount $ PointedList._focus program
-        incrementExecCount instruction@Instruction {..} =
-          instruction {instructionExecCount = succ instructionExecCount}
-        incrementedProgram =
-          program {PointedList._focus = incrementExecCount $ PointedList._focus program}
+        let (updatedProgram, updatedRuntime) =
+              runInstruction program runtime
+         in go updatedRuntime updatedProgram
 
 part1 :: Program -> Int
-part1 program =
-  case runProgram program of
-    LoopDetected acc -> acc
-    Ended acc -> acc
+part1 = output . runProgram
 
 part2 :: Program -> Maybe Int
 part2 program =

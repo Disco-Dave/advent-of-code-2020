@@ -36,7 +36,7 @@ parseLines :: Parser a -> Text -> Either ParseError [a]
 parseLines parser input =
   let parser' =
         Parser.sepBy parser Parser.endOfLine
-          <* Parser.option () Parser.endOfLine
+          <* Parser.many1 Parser.endOfLine
           <* Parser.endOfInput
    in first ParseError $ Parser.parseOnly parser' input
 

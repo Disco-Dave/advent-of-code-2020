@@ -23,13 +23,7 @@ part1 = uncurry go . splitAt 25
 slide :: Int -> [a] -> [[a]]
 slide n xs
   | n <= 0 || length xs < n = []
-  | otherwise =
-    let tail' =
-          case xs of
-            (_ : t) -> t
-            _ -> []
-        part = take n xs
-     in part : slide n tail'
+  | otherwise = take n xs : slide n (tail xs)
 
 part2 :: [Integer] -> Integer -> Maybe Integer
 part2 input target =

@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Solutions.Day2 where
 
 import AdventOfCode.Numeric (integralToBounded)
 import AdventOfCode.Parser (parseLinesOfFile)

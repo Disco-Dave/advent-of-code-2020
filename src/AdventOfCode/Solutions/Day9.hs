@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Solutions.Day9 where
 
 import AdventOfCode.Parser (parseLinesOfFile)
 import Control.Monad (replicateM)

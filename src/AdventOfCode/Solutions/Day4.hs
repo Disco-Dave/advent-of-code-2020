@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Solutions.Day4 where
 
 import AdventOfCode.Parser (parseGroupsInFile)
 import Control.Applicative (Alternative ((<|>)))

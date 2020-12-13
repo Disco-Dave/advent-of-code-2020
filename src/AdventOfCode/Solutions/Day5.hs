@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Solutions.Day5 where
 
 import AdventOfCode.Parser (parseLinesOfFile)
 import Data.Attoparsec.Text (Parser)

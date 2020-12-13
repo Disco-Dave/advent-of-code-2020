@@ -1,4 +1,4 @@
-module Main where
+module AdventOfCode.Solutions.Day6 where
 
 import AdventOfCode.Parser (parseGroupsInFile)
 import qualified Data.Attoparsec.Text as Parser

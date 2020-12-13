@@ -44,124 +44,54 @@ common shared
     ViewPatterns
 
   build-depends:
-    , attoparsec   ^>=0.13.2
-    , base         ^>=4.13.0
-    , bytestring   ^>=0.10.10
-    , containers   ^>=0.6.2
-    , pointedlist  ^>=0.6.1
-    , text         ^>=1.2.4
+    , attoparsec            ^>=0.13.2
+    , base                  ^>=4.13.0
+    , bytestring            ^>=0.10.10
+    , containers            ^>=0.6.2
+    , optparse-applicative  ^>=0.16.1.0
+    , pointedlist           ^>=0.6.1
+    , text                  ^>=1.2.4
 
-common shared-exe
-  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
-  build-depends:  shared-lib
-  hs-source-dirs: app
-
-library shared-lib
+library
   import:          shared
   hs-source-dirs:  src
   exposed-modules:
+    AdventOfCode.CommandLineArgs
     AdventOfCode.Numeric
     AdventOfCode.Parser
+    AdventOfCode.Runner
+    AdventOfCode.Solutions.Day1
+    AdventOfCode.Solutions.Day10
+    AdventOfCode.Solutions.Day11
+    AdventOfCode.Solutions.Day12
+    AdventOfCode.Solutions.Day13
+    AdventOfCode.Solutions.Day14
+    AdventOfCode.Solutions.Day15
+    AdventOfCode.Solutions.Day16
+    AdventOfCode.Solutions.Day17
+    AdventOfCode.Solutions.Day18
+    AdventOfCode.Solutions.Day19
+    AdventOfCode.Solutions.Day2
+    AdventOfCode.Solutions.Day20
+    AdventOfCode.Solutions.Day21
+    AdventOfCode.Solutions.Day22
+    AdventOfCode.Solutions.Day23
+    AdventOfCode.Solutions.Day24
+    AdventOfCode.Solutions.Day25
+    AdventOfCode.Solutions.Day3
+    AdventOfCode.Solutions.Day4
+    AdventOfCode.Solutions.Day5
+    AdventOfCode.Solutions.Day6
+    AdventOfCode.Solutions.Day7
+    AdventOfCode.Solutions.Day8
+    AdventOfCode.Solutions.Day9
     AdventOfCode.Text
 
   other-modules:
 
-executable day1
-  import:  shared, shared-exe
-  main-is: Day1.hs
-
-executable day2
-  import:  shared, shared-exe
-  main-is: Day2.hs
-
-executable day3
-  import:  shared, shared-exe
-  main-is: Day3.hs
-
-executable day4
-  import:  shared, shared-exe
-  main-is: Day4.hs
-
-executable day5
-  import:  shared, shared-exe
-  main-is: Day5.hs
-
-executable day6
-  import:  shared, shared-exe
-  main-is: Day6.hs
-
-executable day7
-  import:  shared, shared-exe
-  main-is: Day7.hs
-
-executable day8
-  import:  shared, shared-exe
-  main-is: Day8.hs
-
-executable day9
-  import:  shared, shared-exe
-  main-is: Day9.hs
-
-executable day10
-  import:  shared, shared-exe
-  main-is: Day10.hs
-
-executable day11
-  import:  shared, shared-exe
-  main-is: Day11.hs
-
-executable day12
-  import:  shared, shared-exe
-  main-is: Day12.hs
-
-executable day13
-  import:  shared, shared-exe
-  main-is: Day13.hs
-
-executable day14
-  import:  shared, shared-exe
-  main-is: Day14.hs
-
-executable day15
-  import:  shared, shared-exe
-  main-is: Day15.hs
-
-executable day16
-  import:  shared, shared-exe
-  main-is: Day16.hs
-
-executable day17
-  import:  shared, shared-exe
-  main-is: Day17.hs
-
-executable day18
-  import:  shared, shared-exe
-  main-is: Day18.hs
-
-executable day19
-  import:  shared, shared-exe
-  main-is: Day19.hs
-
-executable day20
-  import:  shared, shared-exe
-  main-is: Day20.hs
-
-executable day21
-  import:  shared, shared-exe
-  main-is: Day21.hs
-
-executable day22
-  import:  shared, shared-exe
-  main-is: Day22.hs
-
-executable day23
-  import:  shared, shared-exe
-  main-is: Day23.hs
-
-executable day24
-  import:  shared, shared-exe
-  main-is: Day24.hs
-
-executable day25
-  import:  shared, shared-exe
-  main-is: Day25.hs
+executable advent-of-code2020-exe
+  import:  shared
+  main-is: Main.hs
+  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
+  build-depends:  advent-of-code2020
+  hs-source-dirs: app

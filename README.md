@@ -11,14 +11,15 @@ Repository of my solutions to [Advent of Code 2020](https://adventofcode.com/202
 
 ## Completed solutions
 
-| Day   | Solution                                      |
-| ----- | --------------------------------------------- |
-| Day 1 | [Day1.hs](src/AdventOfCode/Solutions/Day1.hs) |
-| Day 2 | [Day2.hs](src/AdventOfCode/Solutions/Day2.hs) |
-| Day 3 | [Day3.hs](src/AdventOfCode/Solutions/Day3.hs) |
-| Day 4 | [Day4.hs](src/AdventOfCode/Solutions/Day4.hs) |
-| Day 5 | [Day5.hs](src/AdventOfCode/Solutions/Day5.hs) |
-| Day 6 | [Day6.hs](src/AdventOfCode/Solutions/Day6.hs) |
-| Day 7 | [Day7.hs](src/AdventOfCode/Solutions/Day7.hs) |
-| Day 8 | [Day8.hs](src/AdventOfCode/Solutions/Day8.hs) |
-| Day 9 | [Day9.hs](src/AdventOfCode/Solutions/Day9.hs) |
+| Day    | Solution                                        |
+| ------ | ----------------------------------------------- |
+| Day 1  | [Day1.hs](src/AdventOfCode/Solutions/Day1.hs)   |
+| Day 2  | [Day2.hs](src/AdventOfCode/Solutions/Day2.hs)   |
+| Day 3  | [Day3.hs](src/AdventOfCode/Solutions/Day3.hs)   |
+| Day 4  | [Day4.hs](src/AdventOfCode/Solutions/Day4.hs)   |
+| Day 5  | [Day5.hs](src/AdventOfCode/Solutions/Day5.hs)   |
+| Day 6  | [Day6.hs](src/AdventOfCode/Solutions/Day6.hs)   |
+| Day 7  | [Day7.hs](src/AdventOfCode/Solutions/Day7.hs)   |
+| Day 8  | [Day8.hs](src/AdventOfCode/Solutions/Day8.hs)   |
+| Day 9  | [Day9.hs](src/AdventOfCode/Solutions/Day9.hs)   |
+| Day 10 | [Day10.hs](src/AdventOfCode/Solutions/Day10.hs) |

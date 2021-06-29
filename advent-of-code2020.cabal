@@ -39,6 +39,7 @@ common shared
     RankNTypes
     RecordWildCards
     ScopedTypeVariables
+    StrictData
     TupleSections
     TypeApplications
     ViewPatterns
@@ -51,6 +52,7 @@ common shared
     , optparse-applicative  ^>=0.16.1.0
     , pointedlist           ^>=0.6.1
     , text                  ^>=1.2.4
+    , vector                ^>=0.12.3
 
 library
   import:          shared
@@ -90,8 +92,8 @@ library
   other-modules:
 
 executable advent-of-code2020-exe
-  import:  shared
-  main-is: Main.hs
+  import:         shared
+  main-is:        Main.hs
   ghc-options:    -threaded -rtsopts -with-rtsopts=-N
   build-depends:  advent-of-code2020
   hs-source-dirs: app

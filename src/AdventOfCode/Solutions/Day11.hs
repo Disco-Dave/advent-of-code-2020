@@ -19,6 +19,8 @@ data Tile
 
 type Seating = Vector (Vector Tile)
 
+type Simulation = Seating -> Seating
+
 tileParser :: Parser Tile
 tileParser =
   Parser.choice
@@ -34,8 +36,8 @@ getDay11Input =
       "data/day11"
       (fmap Vector.fromList (Parser.many1 tileParser))
 
-simulate :: Seating -> Seating
-simulate seating =
+part1 :: Simulation
+part1 seating =
   let countAdjacentOccupiedSeats rowIndex columnIndex =
         let adjacentSeats =
               [ (rowIndex - 1, columnIndex - 1)
@@ -59,8 +61,8 @@ simulate seating =
                 _ -> seat
    in Vector.imap (Vector.imap . simulateSeat) seating
 
-part1 :: Seating -> Int
-part1 =
+run :: Simulation -> Seating -> Int
+run simulate =
   let stabalize seating
         | seating == newSeating = seating
         | otherwise = stabalize newSeating
@@ -73,4 +75,4 @@ part1 =
 main :: IO ()
 main = do
   input <- getDay11Input
-  putStrLn $ "Part 1: " <> show (part1 input)
+  putStrLn $ "Part 1: " <> show (run part1 input)

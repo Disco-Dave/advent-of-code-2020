@@ -99,7 +99,7 @@ part2 (row, column) seat seating =
       eastSeat = findSeat $ zip (repeat row) [column + 1 .. maxColumn]
       southEastSeat = findSeat $ zip [row + 1 .. maxRow] [column + 1 .. maxColumn]
       westSeat = findSeat $ zip (repeat row) [column - 1, column - 2 .. 0]
-      northWestSeat = findSeat $ zip [column - 1, column - 2 .. 0] [row - 1, row - 2 .. 0]
+      northWestSeat = findSeat $ zip [row - 1, row - 2 .. 0] [column - 1, column - 2 .. 0] 
       southSeat = findSeat $ zip [row + 1 .. maxRow] (repeat column)
       southWestSeat = findSeat $ zip [row + 1 .. maxRow] [column - 1, column - 2 .. 0]
 

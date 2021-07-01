@@ -32,14 +32,10 @@ type Distance = Natural
 move :: Coordinates -> Direction -> Distance -> Coordinates
 move (x, y) direction (toInteger -> distance) =
   case direction of
-    North ->
-      (x, y + distance)
-    South ->
-      (x, y - distance)
-    East ->
-      (x + distance, y)
-    West ->
-      (x - distance, y)
+    North -> (x, y + distance)
+    South -> (x, y - distance)
+    East -> (x + distance, y)
+    West -> (x - distance, y)
 
 manhattanDistance :: Coordinates -> Integer
 manhattanDistance (x, y) = abs x + abs y
@@ -64,28 +60,28 @@ execute command ship =
         RotateRight ->
           updateDirection rotateRight
         MoveDirection direction distance ->
-          ship
-            { shipCoordinates = move (shipCoordinates ship) direction distance
-            }
+          ship{shipCoordinates = move (shipCoordinates ship) direction distance}
         MoveForward distance ->
           execute (MoveDirection (shipDirection ship) distance) ship
 
 getDay12Input :: IO [Command]
 getDay12Input =
   let parser =
-        let distance c = fmap (pure . c) Parser.decimal
+        let moveAction c = fmap (pure . c) Parser.decimal
+            rotateAction c =
+              Parser.choice
+                [ Parser.string "90" $> [c]
+                , Parser.string "180" $> [c, c]
+                , Parser.string "270" $> [c, c, c]
+                ]
          in Parser.choice
-              [ Parser.string "L90" $> [RotateLeft]
-              , Parser.string "L180" $> [RotateLeft, RotateLeft]
-              , Parser.string "L270" $> [RotateLeft, RotateLeft, RotateLeft]
-              , Parser.string "R90" $> [RotateRight]
-              , Parser.string "R180" $> [RotateRight, RotateRight]
-              , Parser.string "R270" $> [RotateRight, RotateRight, RotateRight]
-              , Parser.char 'F' *> distance MoveForward
-              , Parser.char 'N' *> distance (MoveDirection North)
-              , Parser.char 'S' *> distance (MoveDirection South)
-              , Parser.char 'E' *> distance (MoveDirection East)
-              , Parser.char 'W' *> distance (MoveDirection West)
+              [ Parser.char 'L' *> rotateAction RotateLeft
+              , Parser.char 'R' *> rotateAction RotateRight
+              , Parser.char 'F' *> moveAction MoveForward
+              , Parser.char 'N' *> moveAction (MoveDirection North)
+              , Parser.char 'S' *> moveAction (MoveDirection South)
+              , Parser.char 'E' *> moveAction (MoveDirection East)
+              , Parser.char 'W' *> moveAction (MoveDirection West)
               ]
    in mconcat <$> parseLinesOfFile "data/day12" parser
 

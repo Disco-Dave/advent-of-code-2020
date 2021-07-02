@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-
 module AdventOfCode.Solutions.Day12 (main) where
 
 import AdventOfCode.Parser (parseLinesOfFile)

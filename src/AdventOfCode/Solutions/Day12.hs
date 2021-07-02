@@ -104,6 +104,7 @@ part1 ship command =
         MoveForward distance ->
           part1 ship (MoveDirection (shipDirection ship) distance)
 
+-- 88069 is too high 
 part2 :: Executor
 part2 ship command =
   case command of
@@ -112,14 +113,22 @@ part2 ship command =
     MoveForward (toInteger -> distance) ->
       let (x, y) = bimap (* distance) (* distance) (shipWaypoint ship)
        in ship{shipCoordinates = bimap (+ x) (+ y) (shipCoordinates ship)}
-    RotateLeft _ ->
-      if uncurry (==) $ bimap (>= 0) (>= 0) (shipWaypoint ship)
-        then ship{shipWaypoint = first negate (shipWaypoint ship)}
-        else ship{shipWaypoint = second negate (shipWaypoint ship)}
-    RotateRight _ ->
-      if uncurry (==) $ bimap (>= 0) (>= 0) (shipWaypoint ship)
-        then ship{shipWaypoint = second negate (shipWaypoint ship)}
-        else ship{shipWaypoint = first negate (shipWaypoint ship)}
+    RotateLeft degrees ->
+      let (x, y) = shipWaypoint ship
+       in ship
+            { shipWaypoint = case degrees of
+                Degrees90 -> (negate y, x)
+                Degrees180 -> (negate y, negate x)
+                Degrees270 -> (y, negate x)
+            }
+    RotateRight degrees ->
+      let (x, y) = shipWaypoint ship
+       in ship
+            { shipWaypoint = case degrees of
+                Degrees90 -> (y, negate x)
+                Degrees180 -> (negate y, negate x)
+                Degrees270 -> (negate y, x)
+            }
 
 run :: Executor -> [Command] -> Integer
 run executor =

@@ -1,7 +1,10 @@
-module AdventOfCode.Solutions.Day12 where
+{-# LANGUAGE FlexibleInstances #-}
+
+module AdventOfCode.Solutions.Day12 (main) where
 
 import AdventOfCode.Parser (parseLinesOfFile)
 import qualified Data.Attoparsec.Text as Parser
+import Data.Bifunctor (bimap, first, second)
 import Data.Foldable (foldl')
 import Data.Functor (($>))
 import Numeric.Natural (Natural)
@@ -43,54 +46,90 @@ manhattanDistance (x, y) = abs x + abs y
 data Ship = Ship
   { shipCoordinates :: Coordinates
   , shipDirection :: Direction
+  , shipWaypoint :: Coordinates
   }
 
+initialShip :: Ship
+initialShip =
+  Ship
+    { shipCoordinates = (0, 0)
+    , shipWaypoint = (10, 1)
+    , shipDirection = East
+    }
+
+data Degrees
+  = Degrees90
+  | Degrees180
+  | Degrees270
+  deriving (Enum)
+
 data Command
-  = RotateLeft
-  | RotateRight
+  = RotateLeft Degrees
+  | RotateRight Degrees
   | MoveDirection Direction Distance
   | MoveForward Distance
-
-execute :: Command -> Ship -> Ship
-execute command ship =
-  let updateDirection f = ship{shipDirection = f (shipDirection ship)}
-   in case command of
-        RotateLeft ->
-          updateDirection rotateLeft
-        RotateRight ->
-          updateDirection rotateRight
-        MoveDirection direction distance ->
-          ship{shipCoordinates = move (shipCoordinates ship) direction distance}
-        MoveForward distance ->
-          execute (MoveDirection (shipDirection ship) distance) ship
 
 getDay12Input :: IO [Command]
 getDay12Input =
   let parser =
-        let moveAction c = fmap (pure . c) Parser.decimal
-            rotateAction c =
+        let degrees =
               Parser.choice
-                [ Parser.string "90" $> [c]
-                , Parser.string "180" $> [c, c]
-                , Parser.string "270" $> [c, c, c]
+                [ Parser.string "90" $> Degrees90
+                , Parser.string "180" $> Degrees180
+                , Parser.string "270" $> Degrees270
                 ]
          in Parser.choice
-              [ Parser.char 'L' *> rotateAction RotateLeft
-              , Parser.char 'R' *> rotateAction RotateRight
-              , Parser.char 'F' *> moveAction MoveForward
-              , Parser.char 'N' *> moveAction (MoveDirection North)
-              , Parser.char 'S' *> moveAction (MoveDirection South)
-              , Parser.char 'E' *> moveAction (MoveDirection East)
-              , Parser.char 'W' *> moveAction (MoveDirection West)
+              [ Parser.char 'L' *> fmap RotateLeft degrees
+              , Parser.char 'R' *> fmap RotateRight degrees
+              , Parser.char 'F' *> fmap MoveForward Parser.decimal
+              , Parser.char 'N' *> fmap (MoveDirection North) Parser.decimal
+              , Parser.char 'S' *> fmap (MoveDirection South) Parser.decimal
+              , Parser.char 'E' *> fmap (MoveDirection East) Parser.decimal
+              , Parser.char 'W' *> fmap (MoveDirection West) Parser.decimal
               ]
-   in mconcat <$> parseLinesOfFile "data/day12" parser
+   in parseLinesOfFile "data/day12" parser
 
-part1 :: [Command] -> Integer
-part1 =
-  let executeCommands = foldl' (flip execute) (Ship (0, 0) East)
+type Executor = Ship -> Command -> Ship
+
+part1 :: Executor
+part1 ship command =
+  let updateDirection rotation degrees =
+        let finalRotation = foldl' (\r _ -> r . rotation) id [0 .. fromEnum degrees]
+         in ship{shipDirection = finalRotation (shipDirection ship)}
+   in case command of
+        RotateLeft degrees ->
+          updateDirection rotateLeft degrees
+        RotateRight degrees ->
+          updateDirection rotateRight degrees
+        MoveDirection direction distance ->
+          ship{shipCoordinates = move (shipCoordinates ship) direction distance}
+        MoveForward distance ->
+          part1 ship (MoveDirection (shipDirection ship) distance)
+
+part2 :: Executor
+part2 ship command =
+  case command of
+    MoveDirection direction distance ->
+      ship{shipWaypoint = move (shipWaypoint ship) direction distance}
+    MoveForward (toInteger -> distance) ->
+      let (x, y) = bimap (* distance) (* distance) (shipWaypoint ship)
+       in ship{shipCoordinates = bimap (+ x) (+ y) (shipCoordinates ship)}
+    RotateLeft _ ->
+      if uncurry (==) $ bimap (>= 0) (>= 0) (shipWaypoint ship)
+        then ship{shipWaypoint = first negate (shipWaypoint ship)}
+        else ship{shipWaypoint = second negate (shipWaypoint ship)}
+    RotateRight _ ->
+      if uncurry (==) $ bimap (>= 0) (>= 0) (shipWaypoint ship)
+        then ship{shipWaypoint = second negate (shipWaypoint ship)}
+        else ship{shipWaypoint = first negate (shipWaypoint ship)}
+
+run :: Executor -> [Command] -> Integer
+run executor =
+  let executeCommands = foldl' executor initialShip
    in manhattanDistance . shipCoordinates . executeCommands
 
 main :: IO ()
 main = do
   input <- getDay12Input
-  putStrLn $ "Part 1: " <> show (part1 input)
+  putStrLn $ "Part 1: " <> show (run part1 input)
+  putStrLn $ "Part 2: " <> show (run part2 input)

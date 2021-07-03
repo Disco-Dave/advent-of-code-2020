@@ -2,7 +2,7 @@ module AdventOfCode.Solutions.Day12 (main) where
 
 import AdventOfCode.Parser (parseLinesOfFile)
 import qualified Data.Attoparsec.Text as Parser
-import Data.Bifunctor (bimap, first, second)
+import Data.Bifunctor (bimap)
 import Data.Foldable (foldl')
 import Data.Functor (($>))
 import Numeric.Natural (Natural)
@@ -104,7 +104,6 @@ part1 ship command =
         MoveForward distance ->
           part1 ship (MoveDirection (shipDirection ship) distance)
 
--- 88069 is too high 
 part2 :: Executor
 part2 ship command =
   case command of
@@ -118,7 +117,7 @@ part2 ship command =
        in ship
             { shipWaypoint = case degrees of
                 Degrees90 -> (negate y, x)
-                Degrees180 -> (negate y, negate x)
+                Degrees180 -> (negate x, negate y)
                 Degrees270 -> (y, negate x)
             }
     RotateRight degrees ->
@@ -126,7 +125,7 @@ part2 ship command =
        in ship
             { shipWaypoint = case degrees of
                 Degrees90 -> (y, negate x)
-                Degrees180 -> (negate y, negate x)
+                Degrees180 -> (negate x, negate y)
                 Degrees270 -> (negate y, x)
             }
 

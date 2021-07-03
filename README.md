@@ -24,3 +24,4 @@ Repository of my solutions to [Advent of Code 2020](https://adventofcode.com/202
 | Day 9  | [Day9.hs](src/AdventOfCode/Solutions/Day9.hs)   |
 | Day 10 | [Day10.hs](src/AdventOfCode/Solutions/Day10.hs) |
 | Day 11 | [Day11.hs](src/AdventOfCode/Solutions/Day11.hs) |
+| Day 12 | [Day12.hs](src/AdventOfCode/Solutions/Day12.hs) |

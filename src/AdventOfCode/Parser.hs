@@ -1,12 +1,10 @@
-module AdventOfCode.Parser
-  ( ParseError (..),
-    parseLines,
-    parseLinesOfFile,
-    pointedListParser,
-    parseGroups,
-    parseGroupsInFile,
-  )
-where
+module AdventOfCode.Parser (
+  ParseError (..),
+  parseFileOrThrow,
+  parseLinesOfFile,
+  pointedListParser,
+  parseGroupsInFile,
+) where
 
 import Control.Exception (Exception, throwIO)
 import Control.Monad (replicateM_)
@@ -15,7 +13,6 @@ import qualified Data.Attoparsec.Text as Parser
 import Data.Bifunctor (first)
 import Data.List.PointedList (PointedList)
 import qualified Data.List.PointedList as PointedList
-import Data.Text (Text)
 import qualified Data.Text.IO as TextIO
 import Data.Typeable (Typeable)
 
@@ -27,32 +24,25 @@ instance Show ParseError where
 
 instance Exception ParseError
 
-parseOrThrow :: (Parser a -> Text -> Either ParseError [a]) -> FilePath -> Parser a -> IO [a]
-parseOrThrow runParser filePath parser = do
+parseFileOrThrow :: FilePath -> Parser a -> IO a
+parseFileOrThrow filePath parser = do
   fileContents <- TextIO.readFile filePath
-  either throwIO pure $ runParser parser fileContents
-
-parseLines :: Parser a -> Text -> Either ParseError [a]
-parseLines parser input =
-  let parser' =
-        Parser.sepBy parser Parser.endOfLine
-          <* Parser.many1 Parser.endOfLine
-          <* Parser.endOfInput
-   in first ParseError $ Parser.parseOnly parser' input
+  let result = first ParseError (Parser.parseOnly parser fileContents)
+  either throwIO pure result
 
 parseLinesOfFile :: FilePath -> Parser a -> IO [a]
-parseLinesOfFile = parseOrThrow parseLines
-
-parseGroups :: Parser a -> Text -> Either ParseError [a]
-parseGroups parser input = do
-  let parser' =
-        Parser.sepBy parser (replicateM_ 2 Parser.endOfLine)
-          <* Parser.option () Parser.endOfLine
-          <* Parser.endOfInput
-   in first ParseError $ Parser.parseOnly parser' input
+parseLinesOfFile filePath parser =
+  parseFileOrThrow filePath $
+    Parser.sepBy parser Parser.endOfLine
+      <* Parser.many1 Parser.endOfLine
+      <* Parser.endOfInput
 
 parseGroupsInFile :: FilePath -> Parser a -> IO [a]
-parseGroupsInFile = parseOrThrow parseGroups
+parseGroupsInFile filePath parser =
+  parseFileOrThrow filePath $
+    Parser.sepBy parser (replicateM_ 2 Parser.endOfLine)
+      <* Parser.option () Parser.endOfLine
+      <* Parser.endOfInput
 
 pointedListParser :: Parser a -> Parser (PointedList a)
 pointedListParser elementParser = do
